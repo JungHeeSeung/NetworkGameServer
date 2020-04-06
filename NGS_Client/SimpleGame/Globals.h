@@ -8,3 +8,7 @@
 #define HERO_ID 0
 
 #define TYPE_NORMAL 0
+
+// ¼­¹ö¿ë
+#define MAX_BUFFER			1024
+#define SERVER_PORT			3500

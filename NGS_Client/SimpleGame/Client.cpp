@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "Client.h"
 
-Client_Socket::Client_Socket() {
+Client_Socket::Client_Socket()
+{
 	int retVal;
 
 	bufSize = 0;
@@ -10,7 +11,7 @@ Client_Socket::Client_Socket() {
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) { return ; }
 
 	// socket()
-	sock = socket(AF_INET, SOCK_STREAM, 0);
+	sock = WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
 	if (sock == INVALID_SOCKET) { err_quit("socket()"); }
 
 	string serverIP;
@@ -22,7 +23,7 @@ Client_Socket::Client_Socket() {
 	ZeroMemory(&serverAddr, sizeof(serverAddr));
 	serverAddr.sin_family = AF_INET;
 	serverAddr.sin_addr.S_un.S_addr = inet_addr(serverIP.c_str());
-	serverAddr.sin_port = ntohs(SERVERPORT);
+	serverAddr.sin_port = ntohs(SERVER_PORT);
 
 	retVal = connect(sock, (SOCKADDR*)&serverAddr, sizeof(serverAddr));
 	if (retVal == SOCKET_ERROR) { err_quit("connect()"); }
@@ -35,17 +36,9 @@ Client_Socket::~Client_Socket()
 	WSACleanup();
 }
 
-void Client_Socket::SendBufToServer(SendData data)
+void Client_Socket::SendBufToServer(Packet data)
 {
 	int retVal;
-
-	int bufSize = sizeof(data);
-
-	// 데이터의 길이 가르쳐주기
-	retVal = send(sock, (char*)&bufSize, sizeof(int), 0);
-	if (retVal == SOCKET_ERROR) {
-		err_display("send()");
-	}
 
 	// 데이터 보내기
 	retVal = send(sock, (char*)&data, sizeof(data), 0);
@@ -60,14 +53,8 @@ Object* Client_Socket::RecvBufFromServer()
 
 	buf.clear();
 
-	// 고정 길이 데이터 받기
-	retVal = recvn(sock, (char*)&bufSize, sizeof(int), 0);
-	if (retVal == SOCKET_ERROR) {
-		err_display("recv()");
-	}
-
 	// 가변 길이 데이터 받기
-	retVal = recvn(sock, (char*)buf.c_str(), bufSize, 0);
+	retVal = recvn(sock, (char*)buf.c_str(), sizeof(buf), 0);
 	if (retVal == SOCKET_ERROR) {
 		err_display("recv()");
 	}

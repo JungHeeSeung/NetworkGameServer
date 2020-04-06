@@ -25,31 +25,22 @@ ScnMgr::ScnMgr()
 		{
 			m_Map[x][y] = new Object();
 			m_Map[x][y]->SetPos(x - 4.f, y - 4.f, 0);
-			m_Map[x][y]->SetVel(0, 0, 0);
 			m_Map[x][y]->SetVol(1, 1, 1);
-			m_Map[x][y]->SetMass(10);
-
+			
 			if ((x + y + 1) % 2 != 1) // 1이 아니면 흰색 타일
 			{
 				m_Map[x][y]->SetColor(1, 1, 1, 1);
-				m_Map[x][y]->SetType(OBJ_WHITETILE);
-
 			}
 			else					// 검은색 타일일 경우
 			{
 				m_Map[x][y]->SetColor(0, 0, 0, 1);
-				m_Map[x][y]->SetType(OBJ_BLACKTILE);
 			}
 		}
 	}
 
 	m_Obj[HERO_ID] = new Object();
 	m_Obj[HERO_ID]->SetPos(-4, -4, 0);
-	m_Obj[HERO_ID]->SetVel(0, 0, 0);
 	m_Obj[HERO_ID]->SetVol(0.5, 0.5, 0.5);
-	m_Obj[HERO_ID]->SetMass(10);
-	m_Obj[HERO_ID]->SetColor(1, 0, 0, 1);
-
 }
 
 
@@ -220,12 +211,9 @@ int ScnMgr::AddObject(float x, float y, float z,
 
 	m_Obj[idx] = new Object();
 	m_Obj[idx]->SetPos(x, y, z);
-	m_Obj[idx]->SetVel(vx, vy, vz);
 	m_Obj[idx]->SetVol(sx, sy, sz);
-	m_Obj[idx]->SetMass(mass);
 	m_Obj[idx]->SetColor(r, g, b, a);
-	m_Obj[idx]->SetType(type);
-
+	
 	return idx;
 }
 
@@ -256,23 +244,24 @@ void ScnMgr::DeleteObject(int idx)
 
 void ScnMgr::Update(float elapsedTime)
 {
-	clientInfo.m_KeyDown = m_KeyDown;
-	clientInfo.m_KeyUp = m_KeyUp;
-	clientInfo.m_KeyLeft = m_KeyLeft;
-	clientInfo.m_KeyRight = m_KeyRight;
+	m_data.m_KeyDown = m_KeyDown;
+	m_data.m_KeyUp = m_KeyUp;
+	m_data.m_KeyLeft = m_KeyLeft;
+	m_data.m_KeyRight = m_KeyRight;
 	
-	sock->SendBufToServer(clientInfo);
+	sock->SendBufToServer(m_data);
+
 	m_Obj[HERO_ID] = sock->RecvBufFromServer();
 
 	//---------------------------------------------------------------------------
 
-	for (int i = 0; i < MAX_OBJ_COUNT; i++)
+	/*for (int i = 0; i < MAX_OBJ_COUNT; i++)
 	{
 		if (m_Obj[i] != NULL)
 		{
 			m_Obj[i]->Update(elapsedTime);
 		}
-	}
+	}*/
 }
 
 

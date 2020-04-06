@@ -34,8 +34,8 @@ private:
 	Renderer* m_Renderer = NULL;
 	Object* m_Obj[MAX_OBJ_COUNT];
 	Object* m_Map[MAX_MAP_X][MAX_MAP_Y];
-	SendData clientInfo;
-
+	Packet m_data;
+	
 	Client_Socket* sock= NULL;
 
 

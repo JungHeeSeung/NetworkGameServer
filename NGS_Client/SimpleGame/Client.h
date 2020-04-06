@@ -1,8 +1,7 @@
 #pragma once
 #include "Object.h"
+#include "Globals.h"
 
-#define SERVERIP "127.0.0.1"
-#define SERVERPORT 9000
 
 class Client_Socket
 {
@@ -19,7 +18,7 @@ public:
 	
 	int recvn(SOCKET s, char* buf, int len, int flags);
 
-	void SendBufToServer(SendData data);
+	void SendBufToServer(Packet data);
 	Object* RecvBufFromServer();
 };
 

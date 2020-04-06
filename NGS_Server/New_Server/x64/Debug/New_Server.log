@@ -1,0 +1,9 @@
+﻿  main.cpp
+C:\Users\moss2\Desktop\20년도 1학기\NetworkGameServer\NGS_Server\New_Server\main.cpp(87,38): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\moss2\Desktop\20년도 1학기\NetworkGameServer\NGS_Server\New_Server\main.cpp(89,39): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\moss2\Desktop\20년도 1학기\NetworkGameServer\NGS_Server\New_Server\main.cpp(91,44): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\moss2\Desktop\20년도 1학기\NetworkGameServer\NGS_Server\New_Server\main.cpp(135,60): warning C4311: 'reinterpret_cast': 'HANDLE'에서 'int'(으)로 포인터가 잘립니다.
+C:\Users\moss2\Desktop\20년도 1학기\NetworkGameServer\NGS_Server\New_Server\main.cpp(135,60): warning C4302: 'reinterpret_cast': 'HANDLE'에서 'int'(으)로 잘립니다.
+C:\Users\moss2\Desktop\20년도 1학기\NetworkGameServer\NGS_Server\New_Server\main.cpp(163,60): warning C4311: 'reinterpret_cast': 'HANDLE'에서 'int'(으)로 포인터가 잘립니다.
+C:\Users\moss2\Desktop\20년도 1학기\NetworkGameServer\NGS_Server\New_Server\main.cpp(163,60): warning C4302: 'reinterpret_cast': 'HANDLE'에서 'int'(으)로 잘립니다.
+  New_Server.vcxproj -> C:\Users\moss2\Desktop\20년도 1학기\NetworkGameServer\NGS_Server\x64\Debug\New_Server.exe
