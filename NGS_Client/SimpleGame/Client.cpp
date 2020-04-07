@@ -53,23 +53,32 @@ void Client_Socket::SendBufToServer(Packet data)
 	if (retVal == SOCKET_ERROR) {
 		err_display("send()");
 	}
+
+	cout << sizeof(data) << "만큼 보냈다!" << endl;
 }
 
-Object* Client_Socket::RecvBufFromServer()
+void Client_Socket::RecvBufFromServer(Object* player)
 {
 	int retVal;
 
-	buf.clear();
+	memset(&buf, 0, sizeof(buf));
 
 	// 가변 길이 데이터 받기
-	retVal = recvn(sock, (char*)buf.c_str(), sizeof(Packet), 0);
+	retVal = recv(sock, (char*)buf, sizeof(Object), 0);
 	if (retVal == SOCKET_ERROR) {
 		err_display("recv()");
 	}
 
-	Object* player = (Object*)buf.c_str();
+	cout << sizeof(Object) << "만큼 받았음!" << endl;
+	
+	/*player = (Object*)buf;*/
 
-	return player;
+	Object* temp = (Object*)buf;
+
+	float x, y, z;
+	temp->GetPos(&x, &y, &z);
+
+	cout << "x: " << x << " y: " << y << " z: " << z << endl;
 }
 
 void Client_Socket::err_quit(const char* msg) {

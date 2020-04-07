@@ -72,9 +72,9 @@ void Object::GetColor(float* r, float* g, float* b, float* a)
 
 void Object::Update(float elpasedTimeInSecond)
 {
-	float x, y, z;
+	/*float x, y, z;
 	
 	GetPos(&x, &y, &z);
-	SetPos(x, y, z);
+	SetPos(x, y, z);*/
 	//-------------------------------------------------------------------
 }

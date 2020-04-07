@@ -33,7 +33,6 @@ struct SOCKETINFO
 						
 short numOfPlayer = 0;
 map <SOCKET, SOCKETINFO> clients;	
-Packet packet;
 Object * g_Map[MAX_MAP_X][MAX_MAP_Y];
 Object * g_Player[10];
 
@@ -137,6 +136,8 @@ void CALLBACK recv_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overla
 {
 	SOCKET client_s = reinterpret_cast<int>(overlapped->hEvent);	
 
+	int id = clients[client_s].player_ID;
+
 	if (dataBytes == 0)	
 	{
 		closesocket(clients[client_s].socket);
@@ -144,17 +145,29 @@ void CALLBACK recv_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overla
 		return;
 	}  
 	
-	cout << "From client : " << sizeof(clients[client_s].packData) << " (" << dataBytes << ") bytes)\n";
+	cout << "From client : " << " (" << dataBytes << ") bytes)\n";
+
+	cout << " KeyDown: " << clients[id].packData.m_KeyDown
+		<< " KeyUp: " << clients[id].packData.m_KeyUp
+		<< " KeyLeft: " << clients[id].packData.m_KeyLeft
+		<< " KeyRight: " << clients[id].packData.m_KeyRight << endl;
 
 	// Game Logic Update
-	Update(clients[client_s].packData, (g_Player[clients[client_s].player_ID]));
+	Update(clients[client_s].packData, (g_Player[id]));
 
-	if (g_Player[clients[client_s].player_ID] != NULL)
+	if (g_Player[id] != NULL)
 	{
-		clients[client_s].dataBuffer.buf = (char*)&(g_Player[clients[client_s].player_ID]);
+		clients[client_s].dataBuffer.buf = (char*)&(g_Player[id]);
+		clients[client_s].dataBuffer.len = sizeof(Object);
+
+
+		float x, y, z;
+		g_Player[id]->GetPos(&x, &y, &z);
+		cout << "x: " << x << " y: " << y << " z: " << z << endl;
 	}
 
-	clients[client_s].dataBuffer.len = dataBytes;
+
+
 	memset(&(clients[client_s].overlapped), 0, sizeof(WSAOVERLAPPED));	
 	clients[client_s].overlapped.hEvent = (HANDLE)client_s;
 
@@ -176,7 +189,12 @@ void CALLBACK send_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overla
 	}  
 
 	
-	cout << "Send message : " << sizeof(clients[client_s].packData) << " (" << dataBytes << " bytes)\n";
+	cout << "Send message : "  << " (" << dataBytes << " bytes)\n";
+
+
+	clients[client_s].dataBuffer.len = sizeof(clients[client_s].packData);
+	clients[client_s].dataBuffer.buf = (char*)&(clients[client_s].packData);
+
 	memset(&(clients[client_s].overlapped), 0, sizeof(WSAOVERLAPPED));
 	clients[client_s].overlapped.hEvent = (HANDLE)client_s;
 
@@ -220,7 +238,7 @@ int main()
 		SOCKET clientSocket = accept(listenSocket, (struct sockaddr*) & clientAddr, &addrLen);
 		clients[clientSocket] = SOCKETINFO{};
 		clients[clientSocket].socket = clientSocket;
-		clients[clientSocket].dataBuffer.len = MAX_BUFFER;
+		clients[clientSocket].dataBuffer.len = sizeof(clients[clientSocket].packData);
 		clients[clientSocket].dataBuffer.buf = (char*)&(clients[clientSocket].packData);
 		clients[clientSocket].player_ID = numOfPlayer;
 		numOfPlayer++;

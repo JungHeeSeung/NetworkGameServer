@@ -40,9 +40,6 @@ ScnMgr::ScnMgr()
 	}
 
 	m_Obj[HERO_ID] = new Object();
-	m_Obj[HERO_ID]->SetPos(-4, -4, 0);
-	m_Obj[HERO_ID]->SetVol(0.5, 0.5, 0.5);
-
 }
 
 
@@ -253,20 +250,17 @@ void ScnMgr::Update(float elapsedTime)
 
 	sock->SendBufToServer(m_data);
 	
-	cout << m_data.m_KeyDown << endl;
-
-	
-	m_Obj[HERO_ID] = sock->RecvBufFromServer();
+	sock->RecvBufFromServer(m_Obj[HERO_ID]);
 
 	//---------------------------------------------------------------------------
 
-	/*for (int i = 0; i < MAX_OBJ_COUNT; i++)
+	for (int i = 0; i < MAX_OBJ_COUNT; i++)
 	{
 		if (m_Obj[i] != NULL)
 		{
 			m_Obj[i]->Update(elapsedTime);
 		}
-	}*/
+	}
 }
 
 

@@ -7,7 +7,7 @@ class Client_Socket
 {
 public:
 	SOCKET sock;
-	string buf;
+	char buf[BUFSIZ];
 	
 	Client_Socket();
 	~Client_Socket();
@@ -18,7 +18,7 @@ public:
 	int recvn(SOCKET s, char* buf, int len, int flags);
 
 	void SendBufToServer(Packet data);
-	Object* RecvBufFromServer();
+	void RecvBufFromServer(Object* player);
 };
 
 

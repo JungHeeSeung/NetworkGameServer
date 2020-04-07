@@ -1,6 +1,4 @@
 ﻿  Client.cpp
 C:\Users\Moss\Desktop\20년도 1학기\NetworkGameServer\NGS_Client\SimpleGame\Client.cpp(15,9): warning C4996: 'WSASocketA': Use WSASocketW() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
 C:\Users\Moss\Desktop\20년도 1학기\NetworkGameServer\NGS_Client\SimpleGame\Client.cpp(30,36): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
-  ScnMgr.cpp
-  코드를 생성하고 있습니다...
   SimpleGame.vcxproj -> C:\Users\Moss\Desktop\20년도 1학기\NetworkGameServer\NGS_Client\x64\Debug\Client.exe
