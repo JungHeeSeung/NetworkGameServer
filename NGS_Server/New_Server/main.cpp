@@ -31,7 +31,7 @@ struct SOCKETINFO
 	short player_ID;
 };									
 						
-short numOfPlayer = 1;
+short numOfPlayer = 0;
 map <SOCKET, SOCKETINFO> clients;	
 Packet packet;
 Object * g_Map[MAX_MAP_X][MAX_MAP_Y];
@@ -39,7 +39,7 @@ Object * g_Player[10];
 
 							
 void Init_Game();
-void Update(Packet pack, Object Player);
+void Update(Packet pack, Object * Player);
 
 void err_quit(const char* msg);
 void err_display(const char* msg);
@@ -92,13 +92,13 @@ void Init_Game()
 	}
 }
 
-void Update(Packet pack, Object Player)
+void Update(Packet pack, Object * Player)
 {
 	float x, y, z;
 
 	if (Player != NULL)
 	{
-		Player.GetPos(&x, &y, &z);
+		Player->GetPos(&x, &y, &z);
 
 		if (pack.m_KeyUp)
 		{
@@ -129,7 +129,7 @@ void Update(Packet pack, Object Player)
 			}
 		}
 
-		Player.SetPos(x, y, z);
+		Player->SetPos(x, y, z);
 	}
 }
 
@@ -147,8 +147,12 @@ void CALLBACK recv_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overla
 	cout << "From client : " << sizeof(clients[client_s].packData) << " (" << dataBytes << ") bytes)\n";
 
 	// Game Logic Update
-	Update(clients[client_s].packData, *(g_Player[clients[client_s].player_ID - 1]));
+	Update(clients[client_s].packData, (g_Player[clients[client_s].player_ID]));
 
+	if (g_Player[clients[client_s].player_ID] != NULL)
+	{
+		clients[client_s].dataBuffer.buf = (char*)&(g_Player[clients[client_s].player_ID]);
+	}
 
 	clients[client_s].dataBuffer.len = dataBytes;
 	memset(&(clients[client_s].overlapped), 0, sizeof(WSAOVERLAPPED));	
@@ -171,11 +175,8 @@ void CALLBACK send_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overla
 		return;
 	}  
 
-	clients[client_s].dataBuffer.len = MAX_BUFFER;
-
-	clients[client_s].dataBuffer.buf = (char*)&(g_Player[ clients[client_s].player_ID - 1 /* Client ID */ ]);
-
-	cout << "TRACE - Send message : " << sizeof(clients[client_s].packData) << " (" << dataBytes << " bytes)\n";
+	
+	cout << "Send message : " << sizeof(clients[client_s].packData) << " (" << dataBytes << " bytes)\n";
 	memset(&(clients[client_s].overlapped), 0, sizeof(WSAOVERLAPPED));
 	clients[client_s].overlapped.hEvent = (HANDLE)client_s;
 
@@ -185,6 +186,8 @@ void CALLBACK send_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overla
 
 int main()
 {
+	Init_Game();
+
 	int retVal;
 
 	WSADATA WSAData;

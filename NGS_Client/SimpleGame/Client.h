@@ -8,8 +8,7 @@ class Client_Socket
 public:
 	SOCKET sock;
 	string buf;
-	int bufSize;
-
+	
 	Client_Socket();
 	~Client_Socket();
 

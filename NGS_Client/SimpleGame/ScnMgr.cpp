@@ -5,6 +5,7 @@
 ScnMgr::ScnMgr()
 {
 	sock = new Client_Socket();
+
 	// Initialize Renderer
 	m_Renderer = new Renderer(1000, 1000);
 	if (!m_Renderer->IsInitialized())
@@ -41,6 +42,7 @@ ScnMgr::ScnMgr()
 	m_Obj[HERO_ID] = new Object();
 	m_Obj[HERO_ID]->SetPos(-4, -4, 0);
 	m_Obj[HERO_ID]->SetVol(0.5, 0.5, 0.5);
+
 }
 
 
@@ -248,9 +250,12 @@ void ScnMgr::Update(float elapsedTime)
 	m_data.m_KeyUp = m_KeyUp;
 	m_data.m_KeyLeft = m_KeyLeft;
 	m_data.m_KeyRight = m_KeyRight;
-	
-	sock->SendBufToServer(m_data);
 
+	sock->SendBufToServer(m_data);
+	
+	cout << m_data.m_KeyDown << endl;
+
+	
 	m_Obj[HERO_ID] = sock->RecvBufFromServer();
 
 	//---------------------------------------------------------------------------

@@ -5,14 +5,19 @@ Client_Socket::Client_Socket()
 {
 	int retVal;
 
-	bufSize = 0;
-
 	WSADATA wsa;
-	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) { return ; }
+	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) 
+	{ 
+		return ;
+	}
 
 	// socket()
 	sock = WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
-	if (sock == INVALID_SOCKET) { err_quit("socket()"); }
+	if (sock == INVALID_SOCKET) 
+	{
+		err_quit("socket()");
+	}
+
 
 	string serverIP;
 	cout << "IP를 입력해주세요: ";
@@ -26,7 +31,10 @@ Client_Socket::Client_Socket()
 	serverAddr.sin_port = ntohs(SERVER_PORT);
 
 	retVal = connect(sock, (SOCKADDR*)&serverAddr, sizeof(serverAddr));
-	if (retVal == SOCKET_ERROR) { err_quit("connect()"); }
+	if (retVal == SOCKET_ERROR)
+	{
+		err_quit("connect()");
+	}
 }
 
 Client_Socket::~Client_Socket()
@@ -54,7 +62,7 @@ Object* Client_Socket::RecvBufFromServer()
 	buf.clear();
 
 	// 가변 길이 데이터 받기
-	retVal = recvn(sock, (char*)buf.c_str(), sizeof(buf), 0);
+	retVal = recvn(sock, (char*)buf.c_str(), sizeof(Packet), 0);
 	if (retVal == SOCKET_ERROR) {
 		err_display("recv()");
 	}
